@@ -21,8 +21,10 @@ packages <- function(x){
 }
 
 ### Install (if necessary) two missing packages in your local SEPAL environment
+library(Hmisc)
+packages(RCurl)
+packages(hexbin)
 packages(gfcanalysis)
-packages(Hmisc)
 
 ### Load necessary packages
 packages(raster)
