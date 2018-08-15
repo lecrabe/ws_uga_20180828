@@ -19,8 +19,6 @@ library(rgdal)
 
 ## Get the list of countries and select one
 (gadm_list  <- data.frame(getData('ISO3')))
-listcodes   <- "UGA"
-countrycode <- listcodes[1]
 
 ## Get GADM data and export as shapefile
 aoi         <- getData('GADM',path=gadm_dir , country= countrycode, level=1)

@@ -11,7 +11,7 @@ time_start  <- Sys.time()
 ####################################################################################
 ####### GET COUNTRY BOUNDARIES
 ####################################################################################
-aoi <- getData('GADM',path=gadm_dir, country= the_country, level=1)
+aoi <- getData('GADM',path=gadm_dir, country= countrycode, level=1)
 bb <- extent(aoi)
 
 

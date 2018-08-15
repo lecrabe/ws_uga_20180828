@@ -40,7 +40,7 @@ gfcstore_dir  <- "~/downloads/gfc_2016/"
 esa_folder    <- "~/downloads/ESA_2016/"
 
 ## Set the country code
-the_country   <- "UGA"
+countrycode <- "UGA"
 
 ## Go to the root directory
 setwd(rootdir)
