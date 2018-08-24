@@ -2,7 +2,7 @@
 ####################################################################################################
 ## Prepare data for time series clipping
 ## Contact remi.dannunzio@fao.org
-## 2016/06/20 
+## 2018/08/24
 ####################################################################################################
 ####################################################################################################
 options(stringsAsFactors=FALSE)
@@ -18,9 +18,9 @@ library(foreign)
 #######################################################################
 ##############################     SETUP YOUR DATA 
 #######################################################################
-the_map <- gfc_mp_sub
+the_map <- paste0(dd_dir,"dd_map_utm.tif")
 
-sae_dir  <- paste0(gfc_dir,
+sae_dir  <- paste0(dirname(the_map),"/",
                    "sae_design_",
                    substr(basename(the_map),
                           1,
@@ -30,9 +30,11 @@ sae_dir  <- paste0(gfc_dir,
                    )
 
 ## Read the datafile and setup the correct names for the variables
-pts <- read.csv(paste0(sae_dir,"pts_CE_2018-07-19_example.csv"))
-names(pts)
+point_file <- list.files(sae_dir,glob2rx("pts_CE*.csv"))
+pts <- read.csv(paste0(sae_dir,point_file))
 
+## Check that names match
+names(pts)
 map_code <- "map_class"
 point_id <- "id"
 xcoord   <- "XCoordinate"
@@ -172,3 +174,4 @@ nrow(sqr_df_selected@data)
 #######################################################################
 base_sqr <- "download_area_grid_stnl"
 writeOGR(obj=sqr_df_selected,dsn=paste0(sae_dir,base_sqr,".kml"),layer=base_sqr,driver = "KML",overwrite_layer = T)
+

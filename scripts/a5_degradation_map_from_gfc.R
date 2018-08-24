@@ -234,6 +234,11 @@ system(sprintf("gdal_translate -ot Byte -co COMPRESS=LZW %s %s",
                paste0(dd_dir,"dd_map.tif")
 ))
 
+system(sprintf("gdalwarp -t_srs EPSG:32636 -co COMPRESS=LZW %s %s",
+               paste0(dd_dir,"dd_map.tif"),
+               paste0(dd_dir,"dd_map_utm.tif")
+               ))
+
 #############################################################
 ### CLEAN
 system(sprintf("rm %s",
