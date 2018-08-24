@@ -7,8 +7,6 @@
 ####################################################################################################
 time_start <- Sys.time() 
 
-
-
 #################### CREATE A COLOR TABLE FOR THE OUTPUT MAP
 my_classes <- c(0,1,2,3,4)
 my_colors  <- col2rgb(c("black","grey","darkgreen","red","orange"))
@@ -22,6 +20,7 @@ write.table(pct,paste0(dd_dir,"color_table.txt"),row.names = F,col.names = F,quo
 
 #################### LOOP THROUGH TILES
 list_tiles <- list.files(seg_dir,pattern=glob2rx("seg*.tif"))
+list_masks  <- list.files(seg_dir,pattern=glob2rx("mask*.tif"))
 time_start <- Sys.time() 
 for(i in 1:length(list_tiles)){
   
@@ -92,7 +91,7 @@ for(i in 1:length(list_tiles)){
   
   #################### ZONAL FOR THE DATA MASK
   system(sprintf("oft-his -i %s -o %s -um %s -maxval %s",
-                 paste0(seg_dir,"mask_mosaic_tile",i,".tif"),
+                 paste0(seg_dir,list_masks[i]),
                  paste0(dd_dir,"stat_mask_tile.txt"),
                  the_segments,
                  1
@@ -132,7 +131,7 @@ for(i in 1:length(list_tiles)){
   
   names(df_gfc_tc)  <- c("clump_id","total_gfc_tc",paste0("tc_",0:100))
   names(df_gfc_ly)  <- c("clump_id","total_gfc_ly",paste0("ly_",0:16))
-  names(df_gfc_16)  <- c("clump_id","total_gfc_gn",paste0("gn_",0:2))
+  names(df_gfc_16)  <- c("clump_id","total_gfc_gn",paste0("fn_",0:1))
   names(df_mask)    <- c("clump_id","total_mask",paste0("msk_",0:1))
   
   head(df_gfc_16)
@@ -144,22 +143,22 @@ for(i in 1:length(list_tiles)){
   
   ####### NON FOREST == 1
   tryCatch({
-    df[rowSums(df_gfc_tc[,paste0("tc_",30:100)]) <  0.3*df$total_gfc_tc , ]$ddclass <- 1
+    df[rowSums(df_gfc_tc[,paste0("tc_",gfc_threshold:100)]) <  gfc_threshold/100*df$total_gfc_tc , ]$ddclass <- 1
   },error=function(e){cat("Not relevant\n")})
   
   ####### FOREST == 2
   tryCatch({
-    df[rowSums(df_gfc_tc[,paste0("tc_",30:100)]) >= 0.3*df$total_gfc_tc & df_gfc_16$gn_2 >= 0.3*df$total_gfc_tc, ]$ddclass <- 2
+    df[rowSums(df_gfc_tc[,paste0("tc_",gfc_threshold:100)]) >= gfc_threshold/100*df$total_gfc_tc & df_gfc_16$fn_1 >= gfc_threshold/100*df$total_gfc_tc, ]$ddclass <- 2
   },error=function(e){cat("Not relevant\n")})
   
   ####### DEGRADATION == 4
   tryCatch({
-    df[rowSums(df_gfc_tc[,paste0("tc_",30:100)]) >= 0.3*df$total_gfc_tc & df_gfc_16$gn_2 >= 0.3*df$total_gfc_tc & rowSums(df_gfc_ly[,paste0("ly_",1:16)]) > 0.1 *df$total_gfc_tc,]$ddclass <- 4
+    df[rowSums(df_gfc_tc[,paste0("tc_",gfc_threshold:100)]) >= gfc_threshold/100*df$total_gfc_tc & df_gfc_16$fn_1 >= gfc_threshold/100*df$total_gfc_tc & rowSums(df_gfc_ly[,paste0("ly_",1:16)]) > 0.1 *df$total_gfc_tc,]$ddclass <- 4
   },error=function(e){cat("Not relevant\n")})
   
   ####### DEFORESTATION == 3
   tryCatch({
-    df[rowSums(df_gfc_tc[,paste0("tc_",30:100)]) >= 0.3*df$total_gfc_tc & df_gfc_16$gn_2 <  0.3*df$total_gfc_tc & rowSums(df_gfc_ly[,paste0("ly_",1:16)]) > 0 ,]$ddclass <- 3
+    df[rowSums(df_gfc_tc[,paste0("tc_",gfc_threshold:100)]) >= gfc_threshold/100*df$total_gfc_tc & df_gfc_16$fn_1 <  gfc_threshold/100*df$total_gfc_tc & rowSums(df_gfc_ly[,paste0("ly_",1:16)]) > 0 ,]$ddclass <- 3
   },error=function(e){cat("Not relevant\n")})
   
   ####### NO DATA == 0
@@ -239,4 +238,8 @@ system(sprintf("gdal_translate -ot Byte -co COMPRESS=LZW %s %s",
 ### CLEAN
 system(sprintf("rm %s",
                paste0(dd_dir,"tmp*.tif")
+))
+
+system(sprintf("rm %s",
+               paste0(dd_dir,"tile_*.tif")
 ))
