@@ -103,6 +103,14 @@ nrow(sqr_df_selected@data)
 subset <- sqr_df_selected[sample(1:nrow(sqr_df_selected@data),10),]
 plot(subset,col="red",add=T)
 
+### Export ONE TILE as KML
+base_sqr <- paste0("one_tile_",countrycode)
+writeOGR(obj=sqr_df_selected[sample(1:nrow(sqr_df_selected@data),1),],
+         dsn=paste(tile_dir,base_sqr,".kml",sep=""),
+         layer=base_sqr,
+         driver = "KML",
+         overwrite_layer = T)
+
 
 ### Generate random points
 pts_rand <- spsample(sqr_df_selected,100,type = "random")
