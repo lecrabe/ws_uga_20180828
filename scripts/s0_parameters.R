@@ -31,6 +31,7 @@ packages(raster)
 packages(rgeos)
 packages(ggplot2)
 packages(rgdal)
+packages(dplyr)
 
 ## Set the working directory
 rootdir       <- "~/ws_uga_20180828/"
@@ -46,7 +47,6 @@ countrycode <- "UGA"
 setwd(rootdir)
 rootdir <- paste0(getwd(),"/")
 
-## Set all sub-directories
 scriptdir<- paste0(rootdir,"scripts/")
 data_dir <- paste0(rootdir,"data/")
 gadm_dir <- paste0(rootdir,"data/gadm/")
@@ -56,9 +56,9 @@ seg_dir  <- paste0(rootdir,"data/segments/")
 dd_dir   <- paste0(rootdir,"data/dd_map/")
 lc_dir   <- paste0(rootdir,"data/forest_mask/")
 esa_dir  <- paste0(rootdir,"data/esa/")
+tile_dir <- paste0(rootdir,"data/tiling/")
+tab_dir  <- paste0(rootdir,"data/tables/")
 
-
-## Create all sub-directories if necessary
 dir.create(data_dir,showWarnings = F)
 dir.create(gadm_dir,showWarnings = F)
 dir.create(gfc_dir,showWarnings = F)
@@ -69,8 +69,9 @@ dir.create(lc_dir,showWarnings = F)
 dir.create(esa_dir,showWarnings = F)
 dir.create(gfcstore_dir,showWarnings = F)
 dir.create(esa_folder,showWarnings = F)
+dir.create(tile_dir,showWarnings = F)
 
-#################### GFC PRODUCTS THRESHOLD
+#################### GFC PRODUCTS
 gfc_threshold <- 30
 
 #################### PRODUCTS AT THE THRESHOLD
