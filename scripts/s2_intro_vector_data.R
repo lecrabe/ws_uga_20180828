@@ -124,9 +124,6 @@ plot(pts_strt)
 pts_utm <- spTransform(pts_rand,CRS("+init=epsg:32636"))
 aoi_utm <- spTransform(aoi,CRS("+init=epsg:32636"))
 
-### Extract polygon values by points
-pts_utm@data <- over(pts_utm,aoi_utm)
-
 
 ### Convert the points into a SpatialPointDataFrame
 spdf <- SpatialPointsDataFrame(pts_utm@coords,
@@ -134,6 +131,10 @@ spdf <- SpatialPointsDataFrame(pts_utm@coords,
                                proj4string = CRS("+init=epsg:32636")
 )
 names(spdf@data) <- "pt_id"
+
+### Extract polygon values by points
+spdf@data$admin_units <- over(spdf,aoi_utm)$NAME_1
+
 
 ### Extract the DBF from a SPDF
 dbf <- spdf@data
@@ -149,7 +150,7 @@ aoi_utm@data$nb_pts <- agg$pt_id
 aoi_utm@data[,c("NAME_1","nb_pts")]
 
 ### Can you find what the below syntax is equivalent to ?
-spdf$district <- aggregate(x=aoi_utm["NAME_1"],
+dbf$district <- aggregate(x=aoi_utm["NAME_1"],
                            by=spdf,
                            FUN=first)$NAME_1
 
