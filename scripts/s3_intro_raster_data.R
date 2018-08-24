@@ -20,12 +20,10 @@ rc <- crop(r,e)
 plot(rc)
 
 ### Use the options col and breaks to specify color palette
-codes <- c(0:8,10)
+codes <- 0.5+c(-1:8,10)
 classes <- c("trees","shrubs","grass","crops","flooded","sparse","bare","builtup","water")
-cols <- c("black","darkgreen","brown","lightgreen","yellow","turquoise","lightyellow","grey","violet","blue")
+cols <- c("black","darkgreen","brown","lightgreen","yellow","turquoise","lightyellow","grey","violet","blue","black")
 plot(r,col=cols,breaks=codes)
-
-tm_shape(rc)+tm_raster(cols)+tmap_options(max.raster = c(plot = 29160000, view = 29160000))
 
 ### Draw random points on the raster: "sampleRandom"
 ###"xy=TRUE" 
