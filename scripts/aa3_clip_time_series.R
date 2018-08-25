@@ -30,7 +30,7 @@ library(rgeos)
 #################### SET PARAMETERS
 
 ## Setup the number of snippets to generate
-how_many <- 1
+how_many <- 10
 
 #### Name of the directory where your Landsat data is
 lsat_dir <- paste0(data_dir,"time_series_image_dir/landsat/")
@@ -70,8 +70,12 @@ bb_pos_lsat <- nchar(lsat_basename)+6
 ## position in sentinel archive name of the "bounding box". Example: "median_hul_clip_s2_1995_" == 25
 bb_pos_stnl <- nchar(stnl_basename)+6
 
-## Read the datafile 
-pts <- read.csv(paste0(sae_dir,"pts_CE_2018-07-19_example.csv"))  #####  CHANGE TO MY VALUE HERE
+## Read the datafile and setup the correct names for the variables
+the_map    <- paste0(dd_dir,"dd_map_utm.tif")
+sae_dir    <- paste0(dirname(the_map),"/","sae_design_",substr(basename(the_map),1,nchar(basename(the_map))-4),"/")
+point_file <- list.files(sae_dir,glob2rx("pts_CE*.csv"))
+pts <- read.csv(paste0(sae_dir,point_file))  #####  CHANGE TO MY VALUE HERE
+
 head(pts)
 names(pts)
 
@@ -92,7 +96,7 @@ ycoord   <- "YCoordinate"
 ##########################################################################################################################################################################
 ################## SCRIPT AUTOMATICALLY RUNS FROM HERE
 ##########################################################################################################################################################################
-dir.create(dest_dir)
+dir.create(dest_dir,showWarnings = F)
 #proj_utm <- proj4string(raster(paste0(rpdy_dir,list.files(rpdy_dir,pattern=glob2rx("*.tif"))[1])))
 dev.off()
 
@@ -131,12 +135,12 @@ lsat_idx <-SpatialPolygonsDataFrame(
 head(lsat_idx)
 names(lsat_idx@data) <- "bb"
 lsat_idx@data$bb <- substr(lsat_idx@data$bb,bb_pos_lsat,(nchar(lsat_idx@data$bb)-4))
-lsat_idx@data
+head(lsat_idx@data)
 plot(lsat_idx)
 
 ################ Create the index of the Sentinel tiles
 list_s2 <- list.files(stnl_dir,pattern=paste0("s2_"))
-lp<-list()
+lp <- list()
 
 for(file in list_s2){
   raster <- raster(paste(stnl_dir,file,sep=""))
@@ -159,7 +163,7 @@ stnl_idx <-SpatialPolygonsDataFrame(
 
 names(stnl_idx@data) <- "bb"
 stnl_idx@data$bb <- substr(stnl_idx@data$bb,bb_pos_stnl,(nchar(stnl_idx@data$bb)-4))
-stnl_idx@data
+head(stnl_idx@data)
 plot(stnl_idx,add=T)
 
 ################# Project both into Lat-Lon EPSG:4326
