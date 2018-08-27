@@ -22,3 +22,7 @@ If you do not have access to SEPAL, follow the below instructions:
 ##### 3/ open an account in SEPAL https://tinyurl.com/sepal-access
 
 Access to SEPAL @ https://sepal.io
+
+####### Time for a fun break ?
+https://play.kahoot.it/#/k/6662d8a8-9f64-4c90-85ad-b65399567096
+
