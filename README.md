@@ -23,6 +23,6 @@ If you do not have access to SEPAL, follow the below instructions:
 
 Access to SEPAL @ https://sepal.io
 
-###### Time for a fun break ?
-Go to www.kahoot.it and enter PIN: 694187
+##### Time for a fun break ?
+Go to www.kahoot.it and enter PIN as instructed
 
