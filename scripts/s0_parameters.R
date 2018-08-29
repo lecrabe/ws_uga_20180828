@@ -38,7 +38,7 @@ rootdir       <- "~/ws_uga_20180828/"
 
 ## Set two downloads directories
 gfcstore_dir  <- "~/downloads/gfc_2016/"
-esa_folder    <- "~/downloads/ESA_2016/"
+esastore_dir  <- "~/downloads/ESA_2016/"
 
 ## Set the country code
 countrycode <- "UGA"
@@ -68,7 +68,7 @@ dir.create(dd_dir,showWarnings = F)
 dir.create(lc_dir,showWarnings = F)
 dir.create(esa_dir,showWarnings = F)
 dir.create(gfcstore_dir,showWarnings = F)
-dir.create(esa_folder,showWarnings = F)
+dir.create(esastore_dir,showWarnings = F)
 dir.create(tile_dir,showWarnings = F)
 
 #################### GFC PRODUCTS
