@@ -16,7 +16,7 @@
 
 ###### INSTRUCTIONS
 ###### Get an authorized download link here: http://2016africalandcover20m.esrin.esa.int/download.php
-authorized_url <- "http://2016africalandcover20m.esrin.esa.int/download.php?token=a0dd91dccfc073bc8802b7d64bdef838"
+authorized_url <- "http://2016africalandcover20m.esrin.esa.int/download.php?token=fdf64398367159f24ad7fb800b19dee0"
 
 ## DOWNLOAD
 download.file(authorized_url,
