@@ -47,11 +47,11 @@ lsat_basename <- "median_roi_clip_lsat_"
 stnl_basename <- "median_roi_clip_s2_"
 
 ## The export image will be in a 3 (height) x 6 (width) grid box
-dim_v_grid <- 4
-dim_h_grid <- 6
+dim_v_grid <- 3
+dim_h_grid <- 7
 
 ## setup year start and end for landsat 
-yr_str_lsat <- 2000
+yr_str_lsat <- 2001
 yr_end_lsat <- 2015
 
 ## setup year start and end for sentinel
@@ -59,10 +59,10 @@ yr_str_stnl <- 2016
 yr_end_stnl <- 2017
 
 ## setup the visualisation parameters for the interpretation box size. in meters
-interpretation_box_size <- 15
+interpretation_box_size <- 30
 
 ## setup the visualisation parameters for the level of zoom. in meters
-outside_box_size        <- 750
+outside_box_size        <- 1500
 
 ## position in landsat archive name of the "bounding box". Example: "median_hul_clip_lsat_1995_" == 27
 bb_pos_lsat <- nchar(lsat_basename)+6
@@ -133,7 +133,7 @@ head(lsat_idx)
 names(lsat_idx@data) <- "bb"
 lsat_idx@data$bb <- substr(lsat_idx@data$bb,bb_pos_lsat,(nchar(lsat_idx@data$bb)-4))
 head(lsat_idx@data)
-plot(lsat_idx)
+#plot(lsat_idx)
 
 ################ Create the index of the Sentinel tiles
 list_s2 <- list.files(stnl_dir,pattern=paste0("s2_"))
@@ -161,7 +161,7 @@ stnl_idx <-SpatialPolygonsDataFrame(
 names(stnl_idx@data) <- "bb"
 stnl_idx@data$bb <- substr(stnl_idx@data$bb,bb_pos_stnl,(nchar(stnl_idx@data$bb)-4))
 head(stnl_idx@data)
-plot(stnl_idx,add=T)
+#plot(stnl_idx,add=T)
 
 ################# Project both into Lat-Lon EPSG:4326
 proj4string(pt_df_geo) <- CRS("+init=epsg:4326")
@@ -179,7 +179,7 @@ pts<-cbind(pts,pts_stnl$bb)
 
 ################# Create the outside boundaries box (1km // twice 500m from center of box)
 lp<-list()
-ysize <- outside_box_size/111321
+ysize <- outside_box_size/111321/2
 
 ## Loop through all points
 for(i in 1:nrow(pts)){
@@ -204,7 +204,7 @@ proj4string(outbox) <- CRS("+init=epsg:4326")
 
 ################# Create the 0.5 ha box (70/2 = 35m shift from center)
 lp<-list()
-ysize <- interpretation_box_size/111321
+ysize <- interpretation_box_size/111321/2
 
 ## Loop through all points
 for(i in 1:nrow(pts)){
@@ -332,12 +332,12 @@ for(the_id in listodo[1:to_go]){
       i <- i + 1
       
       #Plot natural colours composite (NIR-RED-GREEN == 4-3-2 in L7 nomenclature)
-      stack <- stack(swir,nir,red)
+      stack <- stack(nir,red,green)
       plotRGB(stack,stretch="hist",add=T)
       #plot(ndvi,add=T)
     },error=function(e){print(paste0("no image available in ",year," for ",lsat_bbox))})
     
-    lines(in_poly,col="red",lwd=2)
+    lines(in_poly,col="yellow",lwd=2)
     rect(
       xleft =   margins@xmin, 
       ybottom = margins@ymax - outside_box_size/10/111320, 
@@ -377,13 +377,13 @@ for(the_id in listodo[1:to_go]){
       
       stackNat <- stack(red,grn,blu)
       #stackVeg <- stack(nir,ndvi,grn)
-      #stackNIR <- stack(nir,red,grn)
+      stackNIR <- stack(nir,red,grn)
       
-      plotRGB(stackNat,stretch="hist",add=T)
+      plotRGB(stackNIR,stretch="hist",add=T)
       
       
     },error=function(e){print(paste0("no image available in ",year," for sentinel"))})
-    lines(in_poly,col="red",lwd=2)
+    lines(in_poly,col="yellow",lwd=2)
     
     rect(
       xleft =   margins@xmin, 

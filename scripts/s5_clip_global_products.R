@@ -84,7 +84,7 @@ system(sprintf("gdal_translate -ot Byte -projwin %s %s %s %s -co COMPRESS=LZW %s
                ceiling(bb@ymax),
                ceiling(bb@xmax),
                floor(bb@ymin),
-               paste0(esa_folder,"ESACCI-LC-L4-LC10-Map-20m-P1Y-2016-v1.0.tif"),
+               paste0(esastore_dir,"ESACCI-LC-L4-LC10-Map-20m-P1Y-2016-v1.0.tif"),
                paste0(esa_dir,"esa.tif")
 ))
 
@@ -109,6 +109,13 @@ system(sprintf("python %s/oft-cutline_crop.py -v %s -i %s -o %s -a %s",
                "OBJECTID"
 ))
 
+#############################################################
+### CREATE A FOREST MASK FOR MSPA ANALYSIS
+system(sprintf("gdal_calc.py -A %s --co COMPRESS=LZW --outfile=%s --calc=\"%s\"",
+               paste0(esa_dir,"esa_crop.tif"),
+               paste0(esa_dir,"esa_mspa.tif"),
+               paste0("(A==1)*2+((A==0)+(A==200))*0+((A>1)*(A<200))*1")
+))
 
 
 time_products_global <- Sys.time() - time_start
