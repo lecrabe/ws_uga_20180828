@@ -23,6 +23,9 @@ If you do not have access to SEPAL, follow the below instructions:
 
 Access to SEPAL @ https://sepal.io
 
+![Alt text](/presentations/DSC_0467.jpg?raw=true "Group picture 2018-08-31")
+
+
 ##### Time for a fun break ?
 Go to www.kahoot.it and enter PIN as instructed
 
